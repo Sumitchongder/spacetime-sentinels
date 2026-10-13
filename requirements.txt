@@ -3,6 +3,6 @@ qiskit==2.5.2
 qiskit-aer==0.17.2
 qiskit-paulice==0.2.1
 qiskit-ibm-runtime==0.50.0
-numpy==2.5.3
+numpy>=1.26
 matplotlib>=3.8
 pyyaml>=6
