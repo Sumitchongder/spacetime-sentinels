@@ -29,3 +29,5 @@ venv/
 *.mov
 !presentation/*.md
 *Notes.bib
+
+*.bak
