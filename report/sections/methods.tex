@@ -1,0 +1,42 @@
+\section{Methods}
+\label{sec:methods}
+
+The numbered paragraphs below follow the six required steps of the challenge.
+
+\paragraph*{Step 1: payloads.} The Clifford payload is the one-dimensional brickwork used in the IBM tutorial~\cite{ibm_tutorial_spacetime}: a layer of Hadamards on $n=6$ qubits followed by $d$ layers, each made of CZ gates on alternating nearest-neighbour pairs and a random choice of $\sqrt{X}$, $S$, $\sqrt{X}$ on every qubit. We use $d=6$, $12$ and $18$, giving 15, 30 and 45 CZ gates, a width of six qubits and a two-qubit depth equal to $d$ (Table~\ref{tab:payloads}). Every CZ gate defines two candidate $T$ sites, one on each of its qubits immediately after the gate, so the three payloads offer 30, 60 and 90 sites. The $T$-doped family places $n_T\in\{0,1,2,4,8,16\}$ $T$ gates on these sites. The game uses payload seed 7; the study in Sec.~\ref{sec:results} repeats every experiment for five seeds (7, 11, 13, 17, 19).
+
+\begin{table}[b]
+\caption{Payloads. The two-qubit depth of the checked circuit depends on the checks and is reported with every result.}
+\label{tab:payloads}
+\begin{ruledtabular}
+\begin{tabular}{lccc}
+ & shallow & medium & deep \\
+\hline
+CZ layers $d$ & 6 & 12 & 18 \\
+Width (data qubits) & 6 & 6 & 6 \\
+CZ gates & 15 & 30 & 45 \\
+Candidate $T$ sites & 30 & 60 & 90 \\
+$F_0$, Clifford, QFF noise & \FzeroShallow & \FzeroMedium & \FzeroDeep \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\paragraph*{Step 2: reference and fidelity measure.} For the Clifford payload the ideal output $\ket{\psi}$ is obtained by stabilizer simulation (\texttt{StabilizerState}); for $T$-doped payloads by statevector simulation (\texttt{Statevector}), which is exact and cheap at six qubits. We use the state fidelity of the post-selected data register,
+\begin{equation}
+  F_{\mathrm{ps}}=\bra{\psi}\sigma\ket{\psi},
+\end{equation}
+because it is sensitive to every error, including phase errors that any computational-basis distance misses. This matters here: the brickwork payloads have nearly flat output distributions, and for the deep Clifford payload of the game the classical (Hellinger) fidelity of the noisy output is \HzeroDeep{} while its state fidelity is only \FzeroDeep. For Clifford states we evaluate $F$ through the identity $F=2^{-n}\sum_{G\in\mathcal S}\mathrm{Tr}(\sigma G)$, which is what direct fidelity estimation measures~\cite{flammia2011direct,dasilva2011practical}, and check that it agrees with the statevector overlap to machine precision.
+
+One technical point needs care. A syndrome bit is the parity of an ancilla outcome and of some output bits. In an experiment the parity is computed classically after all qubits are measured, so the post-selected object is a distribution, not a state. In simulation we obtain the corresponding state by computing the parity coherently: after the readout channel we apply noiseless CNOT gates from the output qubits in the support $S$ onto the ancilla, so that the ancilla holds the syndrome. These gates act after all noise and are diagonal on the data, so every computational-basis statistic, including $\kappa$ and the post-selected distribution, is identical to the experiment. The data state $\sigma$ of Eq.~\eqref{eq:postselect} is then well defined, and on an ideal run with valid checks $\sigma=\ket\psi\bra\psi$ exactly. Simply tracing out the ancillas without this step would dephase the data in the eigenbasis of $Z_S$ and make even a perfect run look unfaithful.
+
+\paragraph*{Step 3: checks.} Checks are found with \texttt{qiskit-paulice} 0.2.1, \texttt{add\_pauli\_checks(cost="gamma", method="windowed", seed=1)}, the deterministic setting recommended by its documentation. The payload, terminated by measurements, is passed with the chosen target qubits in increasing order; each target receives its own ancilla. The function returns one circuit per number of checks, which we use in Sec.~\ref{sec:res-k}; for the game each target set is a separate call. The checked circuit is re-synthesised by the add-on and may reorder commuting CZ gates, so we match payload gates by their position along each wire, and we obtain the unprotected reference circuit by deleting all ancilla gates, which leaves data gates that compose to the original payload (verified in the test suite). For $T$-doped payloads the add-on cannot be called. We use the checks found on the Clifford skeleton and apply Lemma~\ref{lem:doping}: a site is Z-safe if \texttt{uncovered\_paulis} lists a $Z$ error there. Independently of that list, we test every doped circuit by statevector simulation without noise, and declare a check broken if its syndrome is non-zero with probability above $10^{-9}$. All safe-zone moves pass this test with false-alarm rates that vanish to numerical precision.
+
+\paragraph*{Step 4: noise.} The challenge suggests the synthetic model \texttt{NoiseModel(gate\_noise=0.01)}. Our main profile, \emph{QFF synthetic}, is exactly that for the check search, and the same channel for simulation: a two-qubit depolarizing channel with $p_2=0.01$ after every CZ, payload or check, and a symmetric readout flip with $p_{\mathrm{ro}}=0.01$ on every qubit. Single-qubit Cliffords and $T$ gates are noiseless, the latter because they are virtual on IBM hardware~\cite{mckay2017virtualz}. A second profile, \emph{FakeFez}, follows the tutorial and derives a uniform model from backend calibration data, \texttt{NoiseModel.from\_backend(FakeFez(), layout, uniform\_gate\_noise=True)}, giving $p_2=\PtwoFez$ and $p_{\mathrm{ro}}=\ProFez$. Idling noise is ignored in both, as it is in the current check picker. Using the same channel for picking and for simulating matches the tutorial, so the checks are tuned to the noise they face. If the organisers announce a different model, the whole pipeline is re-run with one command.
+
+\paragraph*{Step 5: measurement.} For every configuration we run two exact Qiskit Aer density-matrix simulations: the checked circuit with its ancillas, which gives $\kappa$ and $F_{\mathrm{ps}}$, and the unprotected circuit with the same $T$ gates, which gives $F_0$. We record the ancilla count, the number of extra two-qubit gates and the two-qubit depth with and without checks, the $\gamma$ cost, the number of Z-safe sites, the broken checks and the classical fidelity. Exact simulation removes shot noise, so two moves that differ by a fraction of a percent can be ranked reliably. During testing we found that noiseless density-matrix runs disagreed with \texttt{Statevector} by up to $3\times10^{-2}$ when Aer's gate fusion was on; with fusion off the agreement is $10^{-16}$, so fusion is disabled throughout.
+
+\paragraph*{Validation.} Exact numbers are only useful if they describe what an experiment would see. We therefore re-ran twenty configurations, covering both noise models, all three depths, Clifford and doped payloads and all three placement policies, through the Qiskit Aer \texttt{SamplerV2} primitive with 50{,}000 shots each, computing syndromes from the measured bits exactly as one would on hardware. The largest deviation of the kept fraction from the exact value is \ValKeepSigma{} standard errors and the largest deviation of the classical fidelity is \ValHdiff{} (Fig.~\ref{fig:validation}).
+
+\paragraph*{Step 6: comparison and search.} The decision space of the game is small enough to enumerate: 57 target sets with at most four checks, five non-zero $T$ quotas with three policies each, three depths and two noise models, \NumMoves{} moves in total. We evaluated all of them. The research experiments add check-count sweeps with up to six checks (E1), $T$-count sweeps up to 16 $T$ gates (E2), magic capacity for all 64 target sets at four depths (E3), a sweep of the noise strength from $p_2=10^{-3}$ to $3\times10^{-2}$ (E5) and an ablation with noisy $T$ gates (E7), each over several payload seeds. Error bars show the standard deviation over seeds.
+
+\paragraph*{Software and compute.} Qiskit 2.5.2, Qiskit Aer 0.17.2, \texttt{qiskit-paulice} 0.2.1, \texttt{qiskit-ibm-runtime} 0.50.0 (fake backends only) and Python 3.13. Every number in this report was produced on a two-core laptop-class machine; the full sweep of the game took about \GridMinutes{} minutes per noise model. The configuration-level parallelism is exposed through a process pool and through Slurm array scripts, and Aer can be switched to GPU execution for larger studies.

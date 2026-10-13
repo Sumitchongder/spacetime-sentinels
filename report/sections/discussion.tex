@@ -1,0 +1,41 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{What the game teaches}
+The challenge lists four learning outcomes. The first, telling detection, mitigation and correction apart, is built into the rules: nothing in the game repairs a state, the only lever is which shots to keep, and the score itself (Sec.~\ref{sec:score}) is the overhead of detection followed by a mitigation-style rescaling, so the player sees where one ends and the other begins. The second, stabilizers and syndromes, appears in the probes and the syndrome parities drawn on the board and, more usefully, in the consequences of breaking them. The third, what makes practical quantum computing hard, is the content of our three findings: protection is made of the same noisy gates it protects against, it only pays above a break-even depth, and it collides with the non-Clifford resources that make a computation worth doing. The fourth, building on existing methods, is what the game asks of the player when choosing between safe and blind doping, which is the construction behind a recent fidelity-certified sampling experiment~\cite{martiel2026sampling}.
+
+We find it useful that the bad options remain legal. A student who retires a broken check expects to recover the unprotected fidelity and instead lands below it. That surprise is the quickest route we know to the idea that an ancilla is not a passive observer: once it has interacted with the data, ignoring it is a choice with physical consequences.
+
+\subsection{Relation to fault tolerance}
+The guiding question asks what fault tolerance is and what it needs. Our results give a small-scale view of two of its requirements. The break-even depth is the detection analogue of a threshold: protection pays only when the errors it can catch outnumber the errors it introduces. The magic capacity is a toy version of a central difficulty of fault-tolerant architectures, where codes that protect Clifford operations transversally cannot do the same for $T$ gates, which must instead be supplied through costly magic-state factories~\cite{bravyi2005magic}. Here the conflict appears in its simplest form, as competition for wires, but the lesson carries over: the non-Clifford part of a computation does not fit comfortably inside a stabilizer code, and the cost of fitting it has to be planned for.
+
+\subsection{Limitations}
+We list the limitations we are aware of, because they bound what the numbers can be used for.
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+  \item \textbf{Size.} Six data qubits and at most four checks per move (six in the check-count study) keep every move exactly simulable. The qualitative trends were stable across five payloads and two noise models, but the absolute gains are specific to this size; the tutorial and Ref.~\cite{martiel2026sampling} work at 12 to 76 qubits.
+  \item \textbf{Noise model.} Uniform depolarizing gate noise and symmetric readout flips, with no idling noise, crosstalk or leakage. Idling noise is also ignored by the current check picker, so the checks are optimal only for the model they were picked with.
+  \item \textbf{Coherent parity.} The parity of output bits is computed coherently in simulation to define a post-selected state. It reproduces all computational-basis statistics of the experiment, but the state fidelity it defines is not directly measurable on hardware without per-stabilizer checks as in the tutorial~\cite{ibm_tutorial_spacetime}.
+  \item \textbf{Scope of the player's choices.} The player chooses where checks go and how $T$ gates are placed, not the internal structure of each check, which \texttt{qiskit-paulice} decides. A version in which players draw their own controlled-Pauli gates would teach more about validity and less about trade-offs.
+  \item \textbf{Playback.} The web version plays back results computed in advance with Qiskit for every legal move. This is a deliberate choice that lets the game run on any device; the terminal version computes moves live.
+  \item \textbf{No hardware run.} Everything runs on Qiskit Aer, as the challenge allows. The pipeline accepts any backend noise model and the shot-based path uses the same primitives interface as hardware execution.
+\end{itemize}
+
+\subsection{Future work}
+Three extensions follow directly. A \emph{check-aware doping} optimiser could choose $T$ positions that keep the most coverage for a given magic budget, turning the capacity curve of Fig.~\ref{fig:capacity} into a design tool. A multiplayer mode in which one player places checks and another places $T$ gates would make the competition between protection and magic explicit, in the spirit of the game-theoretic approach of Ref.~\cite{guerrero2025nash}. Finally, the same scoring can be applied on hardware with \texttt{NoiseLearner}-based noise models and larger payloads, where the absolute gains reported by Ref.~\cite{martiel2025spacetime} are much larger than ours.
+
+\section{Conclusion}
+\label{sec:conclusion}
+Spacetime Sentinels turns low-overhead error detection with spacetime codes into a game whose every rule is a decision of the real workflow and whose every score is a Qiskit result. Playing it, and the study behind it, show three things that are easy to state and hard to guess: spacetime checks only pay above a break-even depth; $T$ gates cost nothing in noise but compete with checks for the same spacetime, so the right number of checks depends on the amount of magic; and a check broken by a $T$ gate is worse than no check, even when ignored. The code, data, notebook and game are open source, and every figure in this paper can be regenerated with one command.
+
+\begin{acknowledgments}
+We thank the organisers of the Qiskit Fall Fest 2026 at IIT Jodhpur, Wenyu Sun for the challenge prompt, and IBM Quantum for \texttt{qiskit-paulice}, Qiskit and Qiskit Aer, and for the tutorials and Qiskit Global Summer School material~\cite{qgss2025lab4,qgss2026lab3} that the challenge builds on.
+\end{acknowledgments}
+
+\section*{Author contributions}
+S.\,T.\,C. and A.\,K. contributed equally. Both authors designed the game, developed the software, ran the experiments, analysed the results and wrote the report.
+
+\section*{Use of AI tools}
+In line with the hackathon rules, we disclose that an AI assistant (Claude, by Anthropic) was used during this project to help write and refactor code, generate plotting and documentation boilerplate, and edit the wording of the report. The authors chose the problem framing and game design, verified the physical arguments, ran and inspected all experiments, and checked every number reported here against the generated data. All responsibility for the content rests with the authors.
+
+\section*{Code and data availability}
+Source code, results, the web game and the scripts to regenerate every figure are available in the project repository under the Apache 2.0 licence. Open-source software used: Qiskit, Qiskit Aer, \texttt{qiskit-paulice} and \texttt{qiskit-ibm-runtime} (Apache 2.0), NumPy and Matplotlib.

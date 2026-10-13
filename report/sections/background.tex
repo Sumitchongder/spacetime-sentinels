@@ -1,0 +1,31 @@
+\section{Background}
+\label{sec:background}
+
+\subsection{Stabilizers, syndromes and post-selection}
+An $n$-qubit Clifford circuit $U$ applied to $\ket{0}^{\otimes n}$ prepares a stabilizer state $\ket{\psi}$, the unique joint $+1$ eigenstate of the abelian group $\mathcal{S}=\{UZ_AU^\dagger : A\subseteq[n]\}$ of $2^n$ Pauli operators~\cite{gottesman1997stabilizer}. Such states can be simulated efficiently~\cite{aaronson2004improved}, which is why Clifford circuits are the natural playground for error detection: we know, at every point in the circuit, which Pauli operators should have a definite value. Measuring one of them and finding the wrong value reveals that an error occurred. A collection of such measurements produces a syndrome bit string $s$; error detection keeps a shot only if $s=0$. If $\rho$ is the noisy state of the data and the ancillas and $\Pi_0$ the projector onto a trivial syndrome, the kept fraction and the post-selected state are
+\begin{equation}
+  \kappa=\mathrm{Tr}(\Pi_0\rho),\qquad \sigma=\frac{\mathrm{Tr}_{\mathrm{anc}}(\Pi_0\rho\Pi_0)}{\kappa}.
+  \label{eq:postselect}
+\end{equation}
+Detection improves the fidelity of $\sigma$ with the ideal state at the price of a smaller $\kappa$. A post-selected fidelity is meaningless without its kept fraction, and we never report one without the other.
+
+\subsection{Spacetime Pauli checks}
+A spacetime check~\cite{martiel2025spacetime} uses one ancilla, prepared in $\ket{+}$, which applies controlled Pauli gates $P_1,\dots,P_m\in\{X,Y,Z\}$ to a single target qubit at wires (moments) $w_1,\dots,w_m$ of the payload, after which the ancilla is rotated back with a Hadamard and measured. Let $B(P,w)$ denote $P$ propagated backwards from wire $w$ to the start of the circuit. The check is \emph{valid} if $\prod_iB(P_i,w_i)$ belongs to the stabilizer group of the input, up to a Pauli $Z_S$ on output qubits that is read out classically: the syndrome bit is then the parity of the ancilla outcome and of the output bits in the support $S$. Equivalently, one can follow the \emph{flow} of the check forward through the circuit. Between two consecutive controlled gates the ancilla is entangled with a Pauli operator $C(t)$ on the data, and a fault $E$ at spacetime location $t$ flips the syndrome exactly when $E$ anticommutes with $C(t)$. Wires where $C(t)$ is the identity are not monitored at all; wires where $C(t)$ acts as $Z$ on a qubit catch $X$ and $Y$ errors there, and so on. The art is to find checks that are valid, use few entangling gates, and cover the faults that matter. \texttt{qiskit-paulice}~\cite{paulice} searches for such checks one target at a time and scores candidate check sets by $\gamma$, the sampling overhead of inverting the noise channel left uncovered by the checks. A value $\gamma=1$ means all modelled noise is detectable.
+
+Coherent Pauli checks~\cite{vandenberg2023cpc} measure a single, generally high-weight operator at one time. On hardware with limited connectivity this costs many SWAP gates. Spreading the check over time, as above, needs only couplings between the ancilla and one neighbouring target, which is what makes the scheme low overhead~\cite{martiel2025spacetime,ibm_tutorial_spacetime}.
+
+\subsection{Magic, and why $T$ gates are special}
+Clifford circuits are classically simulable, so a useful quantum computation needs a non-Clifford resource, conventionally the $T=\mathrm{diag}(1,e^{i\pi/4})$ gate~\cite{bravyi2005magic}. \texttt{add\_pauli\_checks} only accepts Clifford circuits, so $T$ gates must be added after the checks are found. Because $T$ is diagonal, $TZT^\dagger=Z$, while $TXT^\dagger=(X+Y)/\sqrt2$ is not a Pauli operator. This gives the rule stated in the challenge and used by Martiel \emph{et al.}~\cite{martiel2026sampling}:
+
+\begin{lemma}[Doping rule]
+\label{lem:doping}
+Let a set of checks be valid for a Clifford circuit, and insert a $T$ gate on qubit $q$ at spacetime location $t$. If, for every check, the flow operator $C(t)$ acts on $q$ as $I$ or $Z$, all checks remain valid. If some check has $C(t)$ acting on $q$ as $X$ or $Y$, that check is in general no longer valid.
+\end{lemma}
+\begin{proof}
+If $C(t)$ acts as $I$ or $Z$ on $q$ then $T C(t) T^\dagger=C(t)$, so the flow of the check after $t$, and therefore the deterministic ideal value of its syndrome, is unchanged. If $C(t)$ acts as $X$ or $Y$, then $TC(t)T^\dagger$ is a superposition of two Pauli operators that differ on $q$, so the flow does not close onto a stabilizer and the ancilla outcome becomes random on the ideal circuit.
+\end{proof}
+
+A convenient way to find the safe locations is to ask where a single $Z$ error would be invisible to every check: those are exactly the locations where every flow acts as $I$ or $Z$. \texttt{qiskit-paulice} reports them through \texttt{CheckedCircuit.uncovered\_paulis}. We call them \emph{Z-safe sites}. A second hardware fact matters here. On IBM processors $R_Z$ rotations, and therefore $T$ gates, are implemented as virtual frame changes and add no error~\cite{mckay2017virtualz}. The $T$ count of a circuit thus costs nothing in noise, but, by Lemma~\ref{lem:doping}, it can cost a great deal in detection power. This asymmetry drives the central trade-off of our game.
+
+\subsection{Toward fault tolerance}
+The guiding question of the challenge is what fault tolerance is and what it needs~\cite{ibm_blog_ft}. A fault-tolerant computer must keep the error rate of every logical operation below a target while the computation runs, which requires codes with growing distance, repeated syndrome extraction, fast decoding, and a supply of high-fidelity magic states~\cite{fowler2012surface,bravyi2024high,google2025below,bravyi2005magic}. Spacetime detection gives up on the first three and asks a more modest question: how much of today's noise can a handful of ancillas catch in one shot? It is a stepping stone that already exposes two of the hard parts of fault tolerance, namely that protection costs qubits, gates and time, and that non-Clifford resources do not sit comfortably inside a stabilizer code.

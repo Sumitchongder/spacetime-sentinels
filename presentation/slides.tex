@@ -1,0 +1,172 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{default}
+\usepackage[T1]{fontenc}
+\usepackage{helvet}\renewcommand{\familydefault}{\sfdefault}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\input{../report/numbers.tex}
+\definecolor{ink}{HTML}{111827}
+\definecolor{acc}{HTML}{2563EB}
+\definecolor{teal}{HTML}{0F9F8F}
+\definecolor{magic}{HTML}{C98A00}
+\definecolor{bad}{HTML}{D6264B}
+\setbeamercolor{frametitle}{fg=ink}
+\setbeamercolor{normal text}{fg=ink}
+\setbeamercolor{structure}{fg=acc}
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{\hfill\scriptsize\color{gray}Spacetime Sentinels \quad \insertframenumber\hspace{1em}\vspace{0.6em}}
+\graphicspath{{../report/figures/}}
+\newcommand{\hl}[1]{\textcolor{acc}{\textbf{#1}}}
+
+\title{Spacetime Sentinels}
+\subtitle{A game of low-overhead error detection with spacetime codes,\\ scored entirely with Qiskit}
+\author{Sumit Tapas Chongder \and Aditya Kumar}
+\institute{Department of CSE and Department of Physics, IIT Jodhpur\\[2pt]\small Qiskit Fall Fest 2026 Hackathon, Advanced track}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{The question}
+\begin{itemize}\setlength\itemsep{8pt}
+  \item How do we get students to \hl{feel} why fault tolerance is hard?
+  \item Our brief: a game built on \hl{error detection with spacetime codes} (\texttt{qiskit-paulice}).
+  \item Rules must be the physics. Scores must come from Qiskit, never from hand-set values.
+\end{itemize}
+\vspace{10pt}
+\begin{columns}[T]
+\column{0.32\textwidth}\textbf{\textcolor{teal}{Detection (us)}}\\\small flag what the checks see, discard those shots. Nothing is repaired.
+\column{0.32\textwidth}\textbf{Mitigation}\\\small fix the \emph{estimate} afterwards (ZNE, PEC, twirling, readout).
+\column{0.32\textwidth}\textbf{Correction}\\\small logical qubits, repeated stabilizers, a decoder that undoes errors.
+\end{columns}
+\end{frame}
+
+\begin{frame}{A spacetime check in one picture}
+\begin{columns}[c]
+\column{0.5\textwidth}
+\begin{itemize}\setlength\itemsep{6pt}
+  \item One ancilla, one target qubit.
+  \item Controlled $X$, $Y$ or $Z$ at a few moments in time.
+  \item Syndrome = ancilla bit $\oplus$ parity of some outputs. Deterministic if nothing went wrong.
+  \item A fault is caught if it anticommutes with the check's \hl{flow} at that point.
+\end{itemize}
+\column{0.5\textwidth}
+\textbf{The catch: $T$ gates}\\[4pt]
+$TZT^\dagger = Z$ \quad but \quad $TXT^\dagger=\frac{X+Y}{\sqrt2}$\\[6pt]
+A $T$ on a wire where some check acts as $X/Y$ \textcolor{bad}{breaks} that check.\\[6pt]
+On IBM hardware $T$ is a virtual $R_Z$: \hl{free in noise}, not free for the code.
+\end{columns}
+\end{frame}
+
+\begin{frame}{The game}
+\centering\includegraphics[height=0.86\textheight]{board.png}
+\end{frame}
+
+\begin{frame}{Every rule is a physics decision}
+\small
+\begin{tabular}{p{0.3\textwidth}p{0.6\textwidth}}
+\toprule
+Rule & Physics (and the Qiskit call behind it)\\
+\midrule
+Post a sentinel (budget 4) & one ancilla + one spacetime check, \texttt{add\_pauli\_checks}\\
+Green / red sites & every check acts as $I/Z$ there or not, \texttt{uncovered\_paulis}\\
+Magic quota & number of $T$ gates in the payload\\
+Safe / Blind / Retire & doping policy; broken checks detected by noiseless statevector\\
+Run & payload $\to$ checks $\to$ ancilla readout $\to$ post-selection, Aer density matrix\\
+Score $1000\,F_{ps}\kappa^{\beta}$ & fidelity rate; $\beta=\tfrac12$ is SNR per $\sqrt{\text{shot}}$\\
+\bottomrule
+\end{tabular}
+\vspace{6pt}
+\par\NumMoves{} legal moves, every one evaluated exactly with Qiskit Aer.
+\end{frame}
+
+\begin{frame}{Why $R=F_{ps}\sqrt{\kappa}$?}
+\begin{itemize}\setlength\itemsep{8pt}
+  \item Residual error damps an observable by $F_{ps}$; we keep $\kappa N$ of $N$ shots.
+  \item Rescaled estimate has error $\sim \sigma/(F_{ps}\sqrt{\kappa N})$.
+  \item Shots needed $\propto 1/(F_{ps}^2\kappa)=R_{1/2}^{-2}$: the overhead of \hl{detection then mitigation}.
+  \item No checks: $R=F_0$. Gain $G=R/F_0>1$ means the sentinels paid for themselves.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Finding 1: checks only pay above a break-even depth}
+\centering\includegraphics[width=0.95\textwidth]{fig_check_count.pdf}\\
+\small Depth 6: every check lowers $R$ (one check: $G=\EoneGainOneShallow$). Best gain at depth 12: \EoneGainMedium{} ($k=\EoneKMedium$); depth 18: \EoneGainDeep{} ($k=\EoneKDeep$). Five random payloads.
+\end{frame}
+
+\begin{frame}{Finding 2: $T$ count against check placement}
+\centering\includegraphics[height=0.72\textheight]{fig_t_count.pdf}\\
+\small Depth 18, 16 $T$ gates: safe zones $F_{ps}=\EtwoSafeFDeepTSixteen$, blind \EtwoBlindFDeepTSixteen, blind + retire \EtwoRetireFDeepTSixteen, no checks \EtwoNoneFDeepTSixteen.
+\end{frame}
+
+\begin{frame}{Finding 3: protection and magic compete for spacetime}
+\begin{columns}[c]
+\column{0.58\textwidth}\includegraphics[width=\textwidth]{fig_capacity.pdf}
+\column{0.42\textwidth}\small
+Z-safe $T$ sites at depth 18:\\
+0 checks: \CapDeepZero{} of \CapTotalDeep\\
+2 checks: \CapDeepTwo\\
+4 checks: \CapDeepFour\\
+6 checks: \CapDeepSix\\[6pt]
+Every check you add removes places where magic can go. \NumIllegal{} moves in the game are illegal for exactly this reason.
+\end{columns}
+\end{frame}
+
+\begin{frame}{Finding 4: a broken check is worse than no check}
+\begin{itemize}\setlength\itemsep{8pt}
+  \item Blind $T$ placement broke on average \EtwoBrokenFourDeep{} of 3 checks (depth 18, 4 $T$).
+  \item Listening to a broken check throws away good shots: it fires on perfect runs.
+  \item \hl{Ignoring it does not help}: its gates still entangle the ancilla with a non-stabilizer operator, a partial measurement that destroys coherence.
+  \item Depth 18, 4 $T$: blind + retire $F_{ps}=\EtwoRetireFDeepTFour$ vs.\ no checks $F_0=\EtwoNoneFDeepTFour$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The best trade-off and why it wins}
+\centering\includegraphics[width=0.92\textwidth]{fig_pareto_beta.pdf}\\
+\small Deep, 4 $T$: best move \BestDeepTFourTargets{} with \BestDeepTFourPolicy{} placement, $F_0=\BestDeepTFourFzero\to F_{ps}=\BestDeepTFourFps$ at $\kappa=\BestDeepTFourKeep$, gain $\times\BestDeepTFourGain$.
+\end{frame}
+
+\begin{frame}{Can you trust the numbers?}
+\begin{columns}[c]
+\column{0.6\textwidth}\includegraphics[width=\textwidth]{fig_validation.pdf}
+\column{0.4\textwidth}\small
+\begin{itemize}
+  \item Exact density matrix vs.\ \texttt{SamplerV2}, 50k shots, 20 configurations: max deviation \ValKeepSigma$\sigma$ in kept fraction.
+  \item Stabilizer-group identity equals statevector overlap.
+  \item Noiseless runs: valid checks never fire.
+  \item Five random payloads, two noise models.
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Qiskit inside}
+\begin{itemize}\setlength\itemsep{6pt}
+  \item \texttt{qiskit-paulice}: \texttt{add\_pauli\_checks}, \texttt{NoiseModel}, \texttt{NoiseModel.from\_backend(FakeFez)}, \texttt{get\_postselection\_method}, \texttt{uncovered\_paulis}.
+  \item \texttt{qiskit.quantum\_info}: \texttt{StabilizerState}, \texttt{Clifford}, \texttt{Statevector}, \texttt{hellinger\_fidelity}.
+  \item Qiskit Aer: density-matrix simulator, \texttt{SamplerV2} primitive, GPU switch.
+  \item Reproducible notebook, tests in CI, one-command rebuild, Slurm scripts.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Honest limitations}
+\begin{itemize}\setlength\itemsep{6pt}
+  \item 6 data qubits and $\le$ 4 checks so every move is exact. Larger circuits may differ.
+  \item Uniform Pauli noise, no idling noise (as in the current check picker).
+  \item Coherent syndrome parity in simulation (identical statistics to classical XOR).
+  \item Web game plays back pre-computed Qiskit results; live play via \texttt{sentinels play}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\centering
+{\Large\bfseries Protection and magic compete for the same spacetime.}\\[14pt]
+Play it: \texttt{https://OWNER.github.io/spacetime-sentinels}\\[6pt]
+\small Code, report and data: \texttt{github.com/OWNER/spacetime-sentinels}
+\end{frame}
+
+\end{document}

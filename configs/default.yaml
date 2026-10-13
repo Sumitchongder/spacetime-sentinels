@@ -1,0 +1,21 @@
+# Parameters used for every result in results/ and the report.
+payload:
+  num_qubits: 6          # data qubits
+  depths: [6, 12, 18]    # brickwork CZ layers (game levels: shallow, medium, deep)
+  game_seed: 7           # payload used by the game
+  study_seeds: [7, 11, 13, 17, 19]
+checks:
+  package: qiskit-paulice==0.2.1
+  cost: gamma            # deterministic setting recommended by the docs
+  method: windowed
+  seed: 1
+  budget: 4              # ancillas available to the player
+doping:
+  t_counts: [0, 1, 2, 4, 8, 16]
+  policies: [safe, blind, blind-retire]
+noise:
+  qff-synthetic: {p2: 0.01, p_ro: 0.01, p_t: 0.0}
+  fake-fez: {from_backend: FakeFez, uniform_gate_noise: true}
+scoring:
+  rate: "R_beta = F_ps * keep**beta"
+  beta_default: 0.5

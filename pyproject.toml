@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spacetime-sentinels"
+version = "1.0.0"
+description = "Spacetime Sentinels: a game of low-overhead quantum error detection with spacetime codes, scored entirely with Qiskit."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+  { name = "Sumit Tapas Chongder", email = "m25iqt013@iitj.ac.in" },
+  { name = "Aditya Kumar", email = "m25iqt002@iitj.ac.in" },
+]
+keywords = ["qiskit", "quantum error detection", "spacetime codes", "qiskit-paulice", "game", "fault tolerance"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: Apache Software License",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Education",
+]
+dependencies = [
+  "qiskit>=2.0,<3",
+  "qiskit-aer>=0.17",
+  "qiskit-paulice>=0.2.1",
+  "qiskit-ibm-runtime>=0.40",
+  "numpy>=1.26",
+  "matplotlib>=3.8",
+  "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5", "nbconvert>=7", "ipykernel>=6", "pre-commit>=3"]
+gpu = ["qiskit-aer-gpu>=0.17"]
+
+[project.scripts]
+sentinels = "sentinels.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/OWNER/spacetime-sentinels"
+Game = "https://OWNER.github.io/spacetime-sentinels/"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = ["slow: longer simulations"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]

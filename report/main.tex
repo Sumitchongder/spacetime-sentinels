@@ -1,0 +1,47 @@
+\documentclass[aps,pra,twocolumn,superscriptaddress,nofootinbib,floatfix]{revtex4-2}
+
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{braket}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\usepackage{microtype}
+
+\newtheorem{lemma}{Lemma}
+\input{numbers.tex}
+
+\begin{document}
+
+\title{Spacetime Sentinels: a Qiskit game that exposes the competition between spacetime checks and magic in low-overhead quantum error detection}
+
+\author{Sumit Tapas Chongder}
+\thanks{These authors contributed equally to this work.}
+\email{m25iqt013@iitj.ac.in}
+\affiliation{Department of Computer Science \& Engineering and Department of Physics, Indian Institute of Technology Jodhpur, Jodhpur, Rajasthan, India}
+
+\author{Aditya Kumar}
+\thanks{These authors contributed equally to this work.}
+\email{m25iqt002@iitj.ac.in}
+\affiliation{Department of Computer Science \& Engineering and Department of Physics, Indian Institute of Technology Jodhpur, Jodhpur, Rajasthan, India}
+
+\date{October 2026}
+
+\begin{abstract}
+We present \emph{Spacetime Sentinels}, a game in which the player protects a noisy circuit with spacetime Pauli checks and is scored on the post-selected fidelity and the fraction of shots that survive, with every number computed in Qiskit. The player spends a budget of ancilla qubits on checks found by the \texttt{qiskit-paulice} add-on, must inject a quota of $T$ gates into the protected circuit, and chooses whether to place them where they commute with every check or to ignore the checks. Each move is evaluated exactly with Qiskit Aer density-matrix simulation against a stabilizer or statevector reference, and the evaluation agrees with 50{,}000-shot runs of the \texttt{SamplerV2} primitive. We score moves with a fidelity rate $R=F_{\mathrm{ps}}\kappa^{1/2}$, whose inverse square is the sampling overhead of detection followed by rescaling. Exhaustive evaluation of all \NumMoves{} legal moves under two noise models, together with sweeps over five random payloads, reveals three trade-offs that are not obvious before playing. Checks pay for themselves only above a break-even depth: at depth 6 adding checks lowers $R$, while at depth 18 the best number of checks raises it by a factor of \EoneGainDeep{} and lifts the fidelity from \EoneFzeroDeep{} to \EoneFpsDeep. $T$ gates add no noise on hardware, yet each check removes spacetime locations where a $T$ gate can be placed safely, from \CapDeepZero{} with no checks to \CapDeepFour{} with four at depth 18, so the optimal number of checks falls as the magic quota grows. Finally, a check broken by a $T$ gate is worse than no check: with sixteen $T$ gates at depth 18, blind placement lowers the post-selected fidelity to \EtwoBlindFDeepTSixteen, and retiring the broken checks lowers it further to \EtwoRetireFDeepTSixteen, below the \EtwoNoneFDeepTSixteen{} of the unprotected circuit. The game runs in the browser and in the terminal, and all code and data are open source.
+\end{abstract}
+
+\maketitle
+
+\input{sections/intro}
+\input{sections/background}
+\input{sections/game}
+\input{sections/methods}
+\input{sections/results}
+\input{sections/discussion}
+
+\bibliography{refs}
+
+\end{document}

@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spacetime Sentinels | A game of quantum error detection</title>
+<meta name="description" content="Spacetime Sentinels: protect a quantum circuit with spacetime Pauli checks, inject magic T gates, and score on post-selected fidelity and kept shots. Every score is computed with Qiskit, qiskit-paulice and Qiskit Aer.">
+<meta property="og:title" content="Spacetime Sentinels">
+<meta property="og:description" content="A game of low-overhead error detection with spacetime codes. Every score computed with Qiskit.">
+<meta property="og:image" content="assets/og.png">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#4f8cff"/><stop offset="1" stop-color="#38d6c4"/></linearGradient></defs><rect x="2" y="2" width="28" height="28" rx="8" fill="url(#lg)"/><path d="M7 11h18M7 16h18M7 21h18" stroke="#fff" stroke-width="1.6" opacity=".55"/><circle cx="12" cy="11" r="2.4" fill="#fff"/><circle cx="12" cy="21" r="2.4" fill="#fff"/><path d="M12 11v10" stroke="#fff" stroke-width="1.8"/><path d="M21 13.5l2.5 2.5-2.5 2.5-2.5-2.5z" fill="#ffbf3c"/></svg>
+    <div>Spacetime Sentinels<small>error detection with spacetime codes, scored by Qiskit</small></div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-view="play">Play</button>
+    <button class="tab" data-view="learn">How it works</button>
+    <button class="tab" data-view="lab">Lab results</button>
+    <button class="tab" data-view="about">About</button>
+  </nav>
+  <button class="icon-btn" id="theme" title="Toggle light or dark">◐</button>
+</header>
+
+<main>
+<!-- ============================== PLAY ============================== -->
+<section class="view active" id="view-play">
+  <div class="hero">
+    <div>
+      <h1>Guard the circuit. Spend your ancillas wisely. Mind the magic.</h1>
+      <p>Place spacetime Pauli checks on a noisy circuit, decide where the T gates go, and run it. Your score is the
+      fidelity rate <span class="mono">R = F<sub>ps</sub>&middot;keep<sup>&beta;</sup></span> of the post-selected output, computed
+      with qiskit-paulice and Qiskit Aer. No number on this page is hand-set.</p>
+    </div>
+    <div class="pills" id="statusPills"></div>
+  </div>
+
+  <div class="grid-play">
+    <!-- left: mission -->
+    <div class="stack">
+      <div class="card">
+        <h3>1 · Mission</h3>
+        <label class="field">Circuit depth (CZ layers)</label>
+        <div class="seg" id="depthSeg"></div>
+        <label class="field">Magic quota: T gates to inject</label>
+        <div class="seg" id="tSeg"></div>
+        <label class="field">Noise model</label>
+        <select id="profileSel"></select>
+        <p class="hint" id="profileHint"></p>
+      </div>
+      <div class="card">
+        <h3>2 · Sentinels</h3>
+        <p class="hint" style="margin-top:0">Click a qubit label on the board to post a sentinel (one ancilla, one check) on it.</p>
+        <div class="budget" id="budget"></div>
+        <p class="hint" id="budgetTxt"></p>
+        <div class="row2">
+          <button class="btn ghost" id="clearBtn">Clear posts</button>
+          <button class="btn ghost" id="randBtn">Surprise me</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>3 · Magic placement</h3>
+        <div class="seg" id="policySeg">
+          <button data-p="safe" class="on" title="T gates only where every check acts as I or Z">Safe zones</button>
+          <button data-p="blind" title="T gates on fixed random sites, ignoring the checks">Blind</button>
+          <button data-p="blind-retire" title="Blind placement, then stop listening to broken checks">Blind + retire</button>
+        </div>
+        <p class="hint" id="policyHint"></p>
+      </div>
+    </div>
+
+    <!-- centre: board -->
+    <div class="board-col stack">
+      <div class="card">
+        <h3>Spacetime board</h3>
+        <div class="board-wrap"><svg id="board" role="img" aria-label="Spacetime diagram of the payload circuit"></svg></div>
+        <div class="board-legend">
+          <span class="lg"><i class="sw" style="background:var(--cz)"></i>CZ gate</span>
+          <span class="lg"><i class="sw" style="background:var(--accent-2)"></i>check gate (ancilla to target)</span>
+          <span class="lg"><i class="sw" style="background:var(--magic)"></i>T gate</span>
+          <span class="lg"><i class="sw" style="background:color-mix(in srgb,var(--good) 40%,transparent)"></i>Z-safe site</span>
+          <span class="lg"><i class="sw" style="background:color-mix(in srgb,var(--danger) 40%,transparent)"></i>X/Y-covered site</span>
+        </div>
+        <div class="pipeline" id="pipeline">
+          <div class="stage" data-s="0"><b>① Payload</b><span class="v" id="pl0">-</span></div>
+          <div class="stage" data-s="1"><b>② Spacetime checks</b><span class="v" id="pl1">-</span></div>
+          <div class="stage" data-s="2"><b>③ Ancilla readout</b><span class="v" id="pl2">-</span></div>
+          <div class="stage" data-s="3"><b>④ Post-selection</b><span class="v" id="pl3">-</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Trade-off map for this level</h3>
+        <svg id="pareto" viewBox="0 0 640 300" role="img" aria-label="Post-selected fidelity versus kept fraction for every legal move"></svg>
+        <p class="hint">Every dot is a legal move in this level, evaluated in Qiskit Aer. Curves are lines of equal fidelity rate for the current shot price.
+        Your move is the ring; the optimum is the star (revealed after you play).</p>
+      </div>
+    </div>
+
+    <!-- right: run + results -->
+    <div class="stack">
+      <div class="card">
+        <h3>4 · Run</h3>
+        <label class="field">Shot price &beta; = <span class="mono" id="betaVal">0.50</span></label>
+        <input type="range" id="beta" min="0" max="1" step="0.05" value="0.5">
+        <p class="hint" style="margin:4px 0 12px">&beta;=0 values purity only, &beta;=1 values raw yield. &beta;=&frac12; is signal-to-noise per shot.</p>
+        <button class="btn" id="runBtn">▶ Run on Qiskit Aer</button>
+        <div class="row2">
+          <button class="btn ghost" id="bestBtn">Reveal optimum</button>
+          <button class="btn ghost" id="shareBtn">Copy result</button>
+        </div>
+      </div>
+      <div class="card" id="resultCard">
+        <h3>Result</h3>
+        <div class="score"><div class="big" id="scoreBig">----</div><div class="stars" id="stars">☆☆☆</div></div>
+        <div class="hint" id="scoreSub">Press Run to evaluate your move.</div>
+        <div class="metric"><span class="k">Fidelity without checks F<sub>0</sub></span><span class="v" id="mF0">-</span><div class="bar b"><i id="bF0"></i></div></div>
+        <div class="metric"><span class="k">Post-selected fidelity F<sub>ps</sub></span><span class="v" id="mF">-</span><div class="bar f"><i id="bF"></i></div></div>
+        <div class="metric"><span class="k">Kept-shot fraction</span><span class="v" id="mK">-</span><div class="bar k"><i id="bK"></i></div></div>
+        <table class="cost">
+          <tr><td>Ancilla qubits</td><td id="cA">-</td></tr>
+          <tr><td>Extra two-qubit gates</td><td id="c2">-</td></tr>
+          <tr><td>Two-qubit depth</td><td id="cD">-</td></tr>
+          <tr><td>Z-safe T sites left</td><td id="cS">-</td></tr>
+          <tr><td>Checks broken by T</td><td id="cB">-</td></tr>
+        </table>
+        <p class="verdict" id="verdict" style="display:none"></p>
+      </div>
+      <div class="card">
+        <h3>Your best scores</h3>
+        <div id="bestScores" class="hint">Play a level to start your record. Stored only in this browser.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== LEARN ============================== -->
+<section class="view" id="view-learn">
+  <div class="prose">
+    <h2>How the game maps onto the physics</h2>
+    <p>Spacetime Sentinels is built around one technique: low-overhead error detection with spacetime codes
+    (Martiel and Javadi-Abhari, 2025), implemented by the <code>qiskit-paulice</code> add-on. The board is the spacetime diagram of a
+    six-qubit brickwork Clifford circuit. Rows are qubits, columns are layers of CZ gates.</p>
+
+    <div class="cards3">
+      <div class="card"><span class="tag here">this game</span><h4>Error detection</h4><p class="hint">Ancilla checks flag the errors they can see and those shots are thrown away. Errors the checks cannot see pass through. Nothing is repaired. You pay in discarded shots.</p></div>
+      <div class="card"><span class="tag">not this game</span><h4>Error mitigation</h4><p class="hint">The noisy hardware is left alone. The <em>estimate</em> of an observable is corrected afterwards (ZNE, PEC, twirling, readout correction) at the cost of extra circuits and shots.</p></div>
+      <div class="card"><span class="tag">not this game</span><h4>Error correction</h4><p class="hint">One logical qubit lives in many physical qubits. Stabilizers are measured again and again and a decoder infers and undoes errors while the computation runs.</p></div>
+    </div>
+
+    <h3>Rule to physics</h3>
+    <table class="map">
+      <tr><th>Game rule</th><th>Physics it stands for</th><th>Where it is computed</th></tr>
+      <tr><td>Post a sentinel on a qubit row (max 4)</td><td>One ancilla qubit coupled to one target data qubit. The check is a sequence of controlled-Pauli (X, Y or Z) gates from the ancilla onto that target at several times.</td><td><code>qiskit_paulice.add_pauli_checks</code> (cost <code>gamma</code>, method <code>windowed</code>)</td></tr>
+      <tr><td>Teal dots on a row</td><td>The time steps at which that check touches its target. A spacetime check is spread in time instead of measuring one heavy operator at one instant.</td><td>Read from the checked circuit</td></tr>
+      <tr><td>Ancilla budget</td><td>Qubit overhead. Every extra check adds entangling gates and therefore its own noise.</td><td>Cost columns in every record</td></tr>
+      <tr><td>Green and red sites</td><td>Green: every check acts as I or Z there, so a Z error is invisible and a T gate commutes with all checks. Red: some check acts as X or Y there.</td><td><code>CheckedCircuit.uncovered_paulis</code></td></tr>
+      <tr><td>Magic quota (T gates)</td><td>Non-Clifford resource. <code>add_pauli_checks</code> only takes Clifford circuits, so T gates are injected after the checks are found.</td><td>T inserted into the checked circuit</td></tr>
+      <tr><td>Safe-zone placement</td><td>T only on green sites. Every check stays valid (verified: it never fires on the ideal circuit).</td><td>Noiseless statevector of the checked circuit</td></tr>
+      <tr><td>Blind placement</td><td>T on fixed random sites. A T on a red site turns a check into a random coin: it fires on perfect shots.</td><td>Same</td></tr>
+      <tr><td>Retire broken checks</td><td>Stop post-selecting on a broken check. Its gates stay, so it still disturbs the state.</td><td>Same</td></tr>
+      <tr><td>Run</td><td>Payload, checks, ancilla readout, post-selection, under the announced noise model.</td><td>Qiskit Aer density-matrix simulation, exact</td></tr>
+      <tr><td>Score</td><td>Fidelity rate R = F<sub>ps</sub>&middot;keep<sup>&beta;</sup> with the ideal state as reference. Post-selected fidelity is never shown without its kept fraction.</td><td><code>sentinels.scoring</code></td></tr>
+    </table>
+
+    <h3>How a score is computed</h3>
+    <ol>
+      <li><b>Payload.</b> A brickwork Clifford circuit on 6 qubits with 6, 12 or 18 CZ layers (same family as the IBM tutorial), optionally doped with 1 to 16 T gates.</li>
+      <li><b>Reference.</b> Stabilizer simulation for the Clifford payload, statevector simulation for T-doped payloads.</li>
+      <li><b>Checks.</b> qiskit-paulice finds one check per chosen target qubit.</li>
+      <li><b>Noise.</b> Two-qubit depolarizing noise after every CZ (payload and checks) and a readout bit flip on every qubit, the same model used to pick the checks. T gates are noiseless, as virtual RZ gates are on IBM hardware.</li>
+      <li><b>Readout and post-selection.</b> Each syndrome bit is the parity of the ancilla and some output bits. Shots with any non-zero syndrome are discarded.</li>
+      <li><b>Numbers.</b> F<sub>ps</sub> is the fidelity between the ideal state and the post-selected state; keep is the probability that a shot survives. Both are exact (density matrix), and were cross-checked against 50,000-shot runs of the Aer <code>SamplerV2</code> primitive.</li>
+    </ol>
+
+    <h3>What the game is trying to teach</h3>
+    <ul>
+      <li><b>Checks are not free.</b> On shallow circuits the noise added by the checks costs about as much as they catch: most moves score below posting no sentinel at all, and the best one beats it by only a couple of percent.</li>
+      <li><b>T gates are free on the hardware but not for the code.</b> They add no noise, yet each one placed on an X/Y-covered wire breaks a check. A broken check is worse than no check: it throws away good shots, and even when ignored it still disturbs the state.</li>
+      <li><b>Protection and magic compete for the same spacetime.</b> Every check you add removes Z-safe sites. With too many checks there is nowhere left to put the T gates.</li>
+    </ul>
+
+    <h3>A very short history</h3>
+    <div class="timeline">
+      <div><b>1994</b> Shor's factoring algorithm. Qubits are fragile.</div>
+      <div><b>1995</b> Shor's 9-qubit code corrects one X and one Z error.</div>
+      <div><b>1996</b> CSS codes and then stabilizer codes generalise the idea.</div>
+      <div><b>1997 onward</b> Kitaev's topological codes lead to the surface code: nearest-neighbour checks on a 2D grid.</div>
+      <div><b>2024</b> qLDPC codes such as the [[144,12,12]] bivariate bicycle code cut the qubit overhead with longer-range checks.</div>
+      <div><b>2025 to 2026</b> Spacetime codes bring stabilizer-style detection to Clifford circuits on today's hardware.</div>
+    </div>
+
+    <h3>Honest limitations</h3>
+    <ul>
+      <li>Six data qubits and at most four checks, so that every move can be simulated exactly. Trends were checked over five random payloads, but larger circuits may behave differently.</li>
+      <li>The noise is uniform and Pauli, and idling noise is ignored, as in the current qiskit-paulice check picker.</li>
+      <li>The web page plays back results that were computed in advance with Qiskit for every legal move. The same moves can be computed live with <code>sentinels play</code>.</li>
+      <li>Fidelity here is a state fidelity of the post-selected data register. The XOR of output bits into each syndrome is done coherently in simulation; it is classical post-processing in an experiment and gives identical measurement statistics.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================== LAB ============================== -->
+<section class="view" id="view-lab">
+  <div class="prose">
+    <h2>Lab results</h2>
+    <p>All plots are produced by the scripts in <code>experiments/</code> of the repository, averaged over five random payloads unless stated. Full numbers are in <code>results/data</code>.</p>
+    <div class="kpis" id="kpis"></div>
+  </div>
+  <div class="figs" id="figs"></div>
+</section>
+
+<!-- ============================== ABOUT ============================== -->
+<section class="view" id="view-about">
+  <div class="prose">
+    <h2>About</h2>
+    <p>Spacetime Sentinels was built for the Advanced track of the Qiskit Fall Fest 2026 hackathon at IIT Jodhpur, on the prompt
+    <em>Gamifying Error Detection, Mitigation and Correction</em> (error-detection track) written by Wenyu Sun and provided by IBM Quantum.</p>
+    <p><b>Team.</b> Sumit Tapas Chongder and Aditya Kumar (equal contribution), Department of Computer Science &amp; Engineering and Department of Physics, Indian Institute of Technology Jodhpur.</p>
+    <p><b>Links.</b> <a id="repoLink" href="#">Source code</a> · <a id="reportLink" href="#">Report (PDF)</a> · <a id="videoLink" href="#">Video walkthrough</a></p>
+    <p><b>Built on.</b> Qiskit, Qiskit Aer, qiskit-paulice and qiskit-ibm-runtime (fake backends only). Method: S. Martiel and A. Javadi-Abhari, <em>Low-overhead error detection with spacetime codes</em>, arXiv:2504.15725, and S. Martiel et al., <em>Sampling hard circuits with verifiably high fidelity</em>, arXiv:2607.25941. Game idea inspired by D. Litinski, <em>A Game of Surface Codes</em>, Quantum 3, 128 (2019).</p>
+    <p><b>AI use.</b> AI assistants were used while writing code and text, as disclosed in the report. All physics choices and results were checked by the authors.</p>
+    <p class="hint">Licence: Apache 2.0.</p>
+  </div>
+</section>
+</main>
+
+<footer>Spacetime Sentinels · Qiskit Fall Fest 2026 · Every score computed with Qiskit · <span id="buildInfo"></span></footer>
+<div class="toast" id="toast"></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+ "profiles": [
+  {
+   "name": "qff-synthetic",
+   "file": "qff-synthetic.json",
+   "p2": 0.01,
+   "p_ro": 0.01,
+   "source": "Challenge text: synthetic NoiseModel(gate_noise=0.01); 1% readout"
+  },
+  {
+   "name": "fake-fez",
+   "file": "fake-fez.json",
+   "p2": 0.004805553419125208,
+   "p_ro": 0.008829752604166666,
+   "source": "qiskit-paulice NoiseModel.from_backend(FakeFez(), layout=[0..5], uniform_gate_noise=True)"
+  }
+ ]
+}

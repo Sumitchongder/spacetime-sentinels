@@ -1,0 +1,68 @@
+{
+ "kpis": [
+  {
+   "value": "0.89 vs 0.16",
+   "label": "F_ps with 16 T gates at depth 18: safe-zone vs blind doping"
+  },
+  {
+   "value": "\u00d71.10",
+   "label": "best fidelity-rate gain at depth 18 (3 checks)"
+  },
+  {
+   "value": "90 \u2192 14",
+   "label": "Z-safe T sites at depth 18 with 0 and 4 checks"
+  },
+  {
+   "value": "1.4\u03c3",
+   "label": "largest exact-vs-sampled kept-fraction deviation"
+  }
+ ],
+ "figures": [
+  {
+   "file": "fig_t_count.png",
+   "title": "T count against check placement",
+   "caption": "Post-selected fidelity and kept fraction versus T count for three doping policies with checks on q0, q2 and q4. Safe-zone doping keeps both flat; blind doping collapses both."
+  },
+  {
+   "file": "fig_capacity.png",
+   "title": "Magic capacity",
+   "caption": "Number of Z-safe sites where a T gate keeps every check valid, versus number of checks. Dashed lines mark T demands of 4, 8 and 16."
+  },
+  {
+   "file": "fig_check_count.png",
+   "title": "How many checks?",
+   "caption": "Fidelity, kept fraction and fidelity-rate gain versus the number of qiskit-paulice checks. Shallow circuits do not benefit."
+  },
+  {
+   "file": "fig_pareto_beta.png",
+   "title": "Trade-off and shot price",
+   "caption": "Left: every legal move of one level. Right: the number of checks in the winning move as the shot price changes."
+  },
+  {
+   "file": "fig_noise.png",
+   "title": "When does detection pay?",
+   "caption": "Fidelity-rate gain versus two-qubit error rate."
+  },
+  {
+   "file": "fig_location.png",
+   "title": "Check location matters",
+   "caption": "Spread of the gain over different target qubits with the same number of checks."
+  },
+  {
+   "file": "fig_profiles.png",
+   "title": "Two noise models",
+   "caption": "Best gain per number of checks for the synthetic model and the FakeFez calibration."
+  },
+  {
+   "file": "fig_validation.png",
+   "title": "Validation",
+   "caption": "Exact density-matrix numbers against 50,000-shot SamplerV2 runs."
+  },
+  {
+   "file": "fig_t_noise.png",
+   "title": "If T gates were noisy",
+   "caption": "Ablation: depolarizing noise on T gates makes T count lower the raw fidelity too."
+  }
+ ],
+ "build": "data built 2026-10-13"
+}
