@@ -6,11 +6,11 @@
 
 **A game of low-overhead quantum error detection with spacetime codes. Every score is computed with Qiskit.**
 
-[![Play](https://img.shields.io/badge/▶_play-GitHub_Pages-2563eb?style=for-the-badge)](https://OWNER.github.io/spacetime-sentinels/)
+[![Play](https://img.shields.io/badge/▶_play-GitHub_Pages-2563eb?style=for-the-badge)](https://Sumitchongder.github.io/spacetime-sentinels/)
 [![Report](https://img.shields.io/badge/report-PDF-111827?style=for-the-badge)](report/main.pdf)
 [![Video](https://img.shields.io/badge/video-walkthrough-d6264b?style=for-the-badge)](#video-walkthrough)
 
-[![CI](https://github.com/OWNER/spacetime-sentinels/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/spacetime-sentinels/actions/workflows/ci.yml)
+[![CI](https://github.com/Sumitchongder/spacetime-sentinels/actions/workflows/ci.yml/badge.svg)](https://github.com/Sumitchongder/spacetime-sentinels/actions/workflows/ci.yml)
 ![Qiskit](https://img.shields.io/badge/Qiskit-2.5-6929C4)
 ![qiskit-paulice](https://img.shields.io/badge/qiskit--paulice-0.2.1-6929C4)
 ![Aer](https://img.shields.io/badge/Qiskit_Aer-0.17-6929C4)
@@ -57,7 +57,7 @@ You are given a noisy six-qubit Clifford circuit and four ancilla qubits. Post *
 | Complete, runnable source code | [`src/sentinels`](src/sentinels), [`experiments`](experiments), [`tests`](tests), [`notebooks/01_walkthrough.ipynb`](notebooks/01_walkthrough.ipynb) |
 | Recorded presentation | [Video walkthrough](#video-walkthrough) · slides: [`presentation/slides.pdf`](presentation/slides.pdf) · script: [`presentation/VIDEO_SCRIPT.md`](presentation/VIDEO_SCRIPT.md) |
 | Written report | [`report/main.pdf`](report/main.pdf) (LaTeX source in [`report/`](report)) |
-| Playable game | **https://OWNER.github.io/spacetime-sentinels/** and `sentinels play` in a terminal |
+| Playable game | **https://Sumitchongder.github.io/spacetime-sentinels/** and `sentinels play` in a terminal |
 
 ### Video walkthrough
 
@@ -118,7 +118,7 @@ Validated against 50,000-shot runs of the Aer `SamplerV2` primitive (largest dev
 ## Quick start
 
 ```bash
-git clone https://github.com/OWNER/spacetime-sentinels.git
+git clone https://github.com/Sumitchongder/spacetime-sentinels.git
 cd spacetime-sentinels
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt && pip install -e ".[dev]"
@@ -196,7 +196,7 @@ spacetime-sentinels/
   author  = {Chongder, Sumit Tapas and Kumar, Aditya},
   title   = {Spacetime Sentinels: a game of low-overhead quantum error detection with spacetime codes},
   year    = {2026},
-  url     = {https://github.com/OWNER/spacetime-sentinels},
+  url     = {https://github.com/Sumitchongder/spacetime-sentinels},
   version = {1.0.0}
 }
 ```

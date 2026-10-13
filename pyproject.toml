@@ -39,8 +39,8 @@ gpu = ["qiskit-aer-gpu>=0.17"]
 sentinels = "sentinels.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/OWNER/spacetime-sentinels"
-Game = "https://OWNER.github.io/spacetime-sentinels/"
+Homepage = "https://github.com/Sumitchongder/spacetime-sentinels"
+Game = "https://Sumitchongder.github.io/spacetime-sentinels/"
 
 [tool.setuptools.packages.find]
 where = ["src"]

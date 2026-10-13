@@ -4,8 +4,8 @@ title: "Spacetime Sentinels: a game of low-overhead quantum error detection with
 version: 1.0.0
 date-released: 2026-10-15
 license: Apache-2.0
-repository-code: "https://github.com/OWNER/spacetime-sentinels"
-url: "https://OWNER.github.io/spacetime-sentinels/"
+repository-code: "https://github.com/Sumitchongder/spacetime-sentinels"
+url: "https://Sumitchongder.github.io/spacetime-sentinels/"
 keywords: [quantum error detection, spacetime codes, Qiskit, qiskit-paulice, gamification, T gates]
 authors:
   - family-names: Chongder

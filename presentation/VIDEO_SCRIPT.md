@@ -1,7 +1,7 @@
 # Video walkthrough: script and shot list
 
 **Target length:** 9 to 10 minutes. **Speakers:** Sumit Tapas Chongder (S) and Aditya Kumar (A).
-**Screen:** slides from `presentation/slides.pdf`, the live game at `https://OWNER.github.io/spacetime-sentinels/`, and a terminal.
+**Screen:** slides from `presentation/slides.pdf`, the live game at `https://Sumitchongder.github.io/spacetime-sentinels/`, and a terminal.
 **Recording tips:** 1080p, OBS or Zoom screen recording, one take per section, keep the cursor slow. Upload the final MP4 to YouTube (unlisted) or to a GitHub Release, and paste the link into the README section "Video walkthrough".
 
 The judges weight *Presentation* at 40 %: they want each game rule mapped to the physics, the design choices justified, and honest limitations. Every section below is written for that.
