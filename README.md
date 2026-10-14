@@ -49,7 +49,7 @@ Indian Institute of Technology Jodhpur<br>
 
 <br>
 
-<a href="https://sumitchongder.github.io/spacetime-sentinels/"><img src="docs/assets/gameplay.png" width="92%" alt="Gameplay: posting sentinels and scoring the move with Qiskit"></a>
+<a href="https://sumitchongder.github.io/spacetime-sentinels/"><img src="docs/assets/gameplay.png" width="99.5%" alt="Gameplay: posting sentinels and scoring the move with Qiskit"></a>
 
 <sub>After applying sentinels to the qubits, press Run, and see the score that Qiskit Aer computed for your move.</sub>
 
