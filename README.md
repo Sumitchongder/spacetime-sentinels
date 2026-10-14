@@ -274,11 +274,11 @@ spacetime-sentinels/
 
 ## 🤖 AI disclosure
 
-AI assistants (Anthropic's Claude) were used to help write and refactor code, draft documentation, edit the report text and produce the narrated video. The authors chose the research questions and the game design, checked the physics, ran and inspected every experiment, and take responsibility for all content. Details are in the report.
+AI assistants (Anthropic's Claude) were used to help write and refactor code, draft documentation, edit the report. The authors chose the research questions and the game design, checked the physics, ran and inspected every experiment, and take responsibility for all content. Details are in the report.
 
 ## 🙏 Acknowledgements
 
-Built for the Qiskit Fall Fest 2026 hackathon hosted by IIT Jodhpur, on the prompt by Wenyu Sun (McGill University) provided by IBM Quantum. We build on `qiskit-paulice` and the method of S. Martiel and A. Javadi-Abhari (arXiv:2504.15725), the doping construction of Martiel *et al.* (arXiv:2607.25941), and the game design of D. Litinski's *A Game of Surface Codes* (Quantum 3, 128, 2019). Licensed under [Apache 2.0](LICENSE).
+Built for the Qiskit Fall Fest 2026 Hackathon (Advanced Track) hosted by IIT Jodhpur, on the prompt by Wenyu Sun (McGill University) provided by IBM Quantum. We build on `qiskit-paulice` and the method of S. Martiel and A. Javadi-Abhari (arXiv:2504.15725), the doping construction of Martiel *et al.* (arXiv:2607.25941), and the game design of D. Litinski's *A Game of Surface Codes* (Quantum 3, 128, 2019). Licensed under [Apache 2.0](LICENSE).
 
 <div align="center">
 
