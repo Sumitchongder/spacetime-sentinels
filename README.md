@@ -6,11 +6,6 @@
 
 ### A game of low-overhead quantum error detection with spacetime codes. Every score is computed with Qiskit.
 
-[![Play the game](https://img.shields.io/badge/▶_PLAY_THE_GAME-live_on_GitHub_Pages-2563EB?style=for-the-badge&labelColor=0B0F17)](https://sumitchongder.github.io/spacetime-sentinels/)
-[![Video walkthrough](https://img.shields.io/badge/🎬_VIDEO-13--min_walkthrough-D6264B?style=for-the-badge&labelColor=0B0F17)](#-video-walkthrough)
-[![Report](https://img.shields.io/badge/📄_REPORT-12--page_paper_(PDF)-0F9F8F?style=for-the-badge&labelColor=0B0F17)](report/main.pdf)
-[![arXiv](https://img.shields.io/badge/arXiv-quant--ph_·_submitted-B31B1B?style=for-the-badge&logo=arxiv&logoColor=white)](#-paper-and-arxiv-preprint)
-
 [![CI](https://github.com/Sumitchongder/spacetime-sentinels/actions/workflows/ci.yml/badge.svg)](https://github.com/Sumitchongder/spacetime-sentinels/actions/workflows/ci.yml)
 [![Pages](https://github.com/Sumitchongder/spacetime-sentinels/actions/workflows/pages.yml/badge.svg)](https://sumitchongder.github.io/spacetime-sentinels/)
 ![Qiskit](https://img.shields.io/badge/Qiskit-2.5-6929C4?logo=qiskit&logoColor=white)
@@ -18,6 +13,14 @@
 ![Qiskit Aer](https://img.shields.io/badge/Qiskit_Aer-0.17-6929C4)
 ![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)
 [![License](https://img.shields.io/badge/license-Apache_2.0-green)](LICENSE)
+
+
+[![Play the game](https://img.shields.io/badge/▶_PLAY_THE_GAME-live_on_GitHub_Pages-2563EB?style=for-the-badge&labelColor=0B0F17)](https://sumitchongder.github.io/spacetime-sentinels/)
+[![Video walkthrough](https://img.shields.io/badge/🎬_VIDEO-13--min_walkthrough-D6264B?style=for-the-badge&labelColor=0B0F17)](#-video-walkthrough)
+[![Report](https://img.shields.io/badge/📄_REPORT-12--page_paper_(PDF)-0F9F8F?style=for-the-badge&labelColor=0B0F17)](report/main.pdf)
+[![arXiv](https://img.shields.io/badge/arXiv-quant--ph_·_submitted-B31B1B?style=for-the-badge&logo=arxiv&logoColor=white)](#-paper-and-arxiv-preprint)
+
+
 
 **Qiskit Fall Fest 2026 · IIT Jodhpur · Advanced track**<br>
 *Gamifying Error Detection, Mitigation and Correction: error-detection track*
@@ -46,17 +49,11 @@ Indian Institute of Technology Jodhpur<br>
 
 <br>
 
-<a href="https://sumitchongder.github.io/spacetime-sentinels/"><img src="docs/assets/gameplay.gif" width="92%" alt="Gameplay: posting sentinels and scoring the move with Qiskit"></a>
+<a href="https://sumitchongder.github.io/spacetime-sentinels/"><img src="docs/assets/gameplay.png" width="92%" alt="Gameplay: posting sentinels and scoring the move with Qiskit"></a>
 
-<sub>Post sentinels, press Run, and see the score that Qiskit Aer computed for your move.</sub>
+<sub>After applying sentinels to the qubits, press Run, and see the score that Qiskit Aer computed for your move.</sub>
 
 </div>
-
-**Your first round, in 60 seconds:**
-
-1. Choose **Medium 12** and **0 (Clifford)**, then press **Run on Qiskit Aer** without any sentinels. This is your baseline (722).
-2. Click the labels **q0** and **q3** on the board to post two sentinels. Press **Run** again: **776 ★★★**.
-3. Now post all four sentinels. The score *drops*. That surprise is the whole game: protection costs something, and you have to spend it wisely.
 
 ---
 
@@ -72,16 +69,6 @@ Indian Institute of Technology Jodhpur<br>
 
 </div>
 
-A beginner-friendly tour, with narration and captions, that plays the real game from start to finish:
-
-| Chapter | What you learn | Chapter | What you learn |
-|---|---|---|---|
-| 1 | The big idea: quality against quantity | 7 | Breaking a sentinel with a badly placed T gate |
-| 2 | A tour of the screen | 8 | Capacity: protection and magic compete for space |
-| 3 | The baseline with no protection | 9 | The trade-off map and the shot-price slider |
-| 4 | Posting your first sentinels (★★★) | 10 | Real hardware noise (FakeFez) and the other tabs |
-| 5 | Why more sentinels is not always better | 11 | The winning strategy in four rules |
-| 6 | Magic: adding T gates safely | 12 | The three stories the game tells |
 
 ---
 
@@ -89,7 +76,7 @@ A beginner-friendly tour, with narration and captions, that plays the real game 
 
 <div align="center">
 
-<a href="report/main.pdf"><img src="https://img.shields.io/badge/READ_THE_FULL_REPORT_(PDF)_↗-12_pages_·_submitted_to_arXiv_quant--ph-0F9F8F?style=for-the-badge&labelColor=0B0F17" width="82%" alt="Read the report"></a>
+<a href="report/main.pdf"><img src="https://img.shields.io/badge/CLICK_TO_READ_THE_FULL_REPORT_(PDF)_↗-12_pages_·_submitted_to_arXiv_quant--ph-0F9F8F?style=for-the-badge&labelColor=0B0F17" width="82%" alt="Read the report"></a>
 
 </div>
 
