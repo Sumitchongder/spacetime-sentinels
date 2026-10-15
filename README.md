@@ -63,7 +63,7 @@ Indian Institute of Technology Jodhpur<br>
 
 <a href="https://youtu.be/TBfH10EU_gI">
 
-<img src="docs/assets/thumbnail.png" width="92%" alt="Watch the 13-minute beginner walkthrough">
+<img src="docs/assets/video_thumb.png" width="92%" alt="Watch the 13-minute beginner walkthrough">
 
 </a>
 
