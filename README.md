@@ -61,9 +61,7 @@ Indian Institute of Technology Jodhpur<br>
 
 <div align="center">
 
-<a href="https://github.com/Sumitchongder/spacetime-sentinels/releases/download/v1.0.0/Quantum_Eclipse_Sumit_Chongder_Aditya_Kumar_QFF26_Presentation.mp4">
-<img src="docs/assets/video_thumb.png" width="82%" alt="Watch the 13-minute beginner walkthrough">
-</a>
+[![Watch Video](https://github.com/Sumitchongder/spacetime-sentinels/releases/download/v1.0.0/thumbnail.png)](https://youtu.be/TBfH10EU_gI)
 
 **[▶ Watch the full walkthrough (12:52, 1080p)](https://youtu.be/TBfH10EU_gI)** · [Slides (PDF)](presentation/slides.pdf)
 
