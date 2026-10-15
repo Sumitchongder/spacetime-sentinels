@@ -16,7 +16,7 @@
 
 
 [![Play the game](https://img.shields.io/badge/▶_PLAY_THE_GAME-live_on_GitHub_Pages-2563EB?style=for-the-badge&labelColor=0B0F17)](https://sumitchongder.github.io/spacetime-sentinels/)
-[![Video walkthrough](https://img.shields.io/badge/🎬_VIDEO-13--min_walkthrough-D6264B?style=for-the-badge&labelColor=0B0F17)](#-video-walkthrough)
+[![Video walkthrough](https://img.shields.io/badge/🎬_VIDEO-17--min_walkthrough-D6264B?style=for-the-badge&labelColor=0B0F17)](#-video-walkthrough)
 [![Report](https://img.shields.io/badge/📄_REPORT-12--page_paper_(PDF)-0F9F8F?style=for-the-badge&labelColor=0B0F17)](report/main.pdf)
 [![arXiv](https://img.shields.io/badge/arXiv-quant--ph_·_submitted-B31B1B?style=for-the-badge&logo=arxiv&logoColor=white)](#-paper-and-arxiv-preprint)
 
