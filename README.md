@@ -61,11 +61,13 @@ Indian Institute of Technology Jodhpur<br>
 
 <div align="center">
 
-[![Watch Video](https://github.com/Sumitchongder/spacetime-sentinels/releases/download/v1.0.0/thumbnail.png)](https://youtu.be/TBfH10EU_gI)
+<a href="https://youtu.be/TBfH10EU_gI">
+
+<img src="docs/assets/video_thumb.png" width="92%" alt="Watch the 13-minute beginner walkthrough">
+
+</a>
 
 **[▶ Watch the full walkthrough (12:52, 1080p)](https://youtu.be/TBfH10EU_gI)** · [Slides (PDF)](presentation/slides.pdf)
-
-</div>
 
 
 ---
