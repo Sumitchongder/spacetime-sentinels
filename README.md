@@ -69,6 +69,7 @@ Indian Institute of Technology Jodhpur<br>
 
 **[▶ Watch the full walkthrough (12:52, 1080p)](https://youtu.be/TBfH10EU_gI)** · [Slides (PDF)](presentation/slides.pdf)
 
+</div>
 
 ---
 
