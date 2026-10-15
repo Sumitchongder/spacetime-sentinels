@@ -154,7 +154,7 @@ A check broken by a misplaced T gate hurts fidelity, and it keeps hurting even a
 | Requirement | Status | Link |
 |---|:---:|---|
 | Playable game | ✅ | **https://sumitchongder.github.io/spacetime-sentinels/** and `sentinels play` in a terminal |
-| Recorded presentation | ✅ | [Video walkthrough](#-video-walkthrough) · [slides](presentation/slides.pdf) · [script](presentation/VIDEO_SCRIPT.md) |
+| Recorded presentation | ✅ | [Video walkthrough](#-video-walkthrough) · [slides](presentation/slides.pdf) |
 | Written report | ✅ | [`report/main.pdf`](report/main.pdf), submitted to arXiv [quant-ph] |
 | Complete, runnable source code | ✅ | [`src/sentinels`](src/sentinels) · [`experiments`](experiments) · [`tests`](tests) · [`notebooks/01_walkthrough.ipynb`](notebooks/01_walkthrough.ipynb) |
 
