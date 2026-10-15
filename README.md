@@ -65,7 +65,7 @@ Indian Institute of Technology Jodhpur<br>
 <img src="docs/assets/video_thumb.png" width="82%" alt="Watch the 13-minute beginner walkthrough">
 </a>
 
-**[▶ Watch the full walkthrough (12:52, 1080p)](https://github.com/Sumitchongder/spacetime-sentinels/releases/download/v1.0.0/Spacetime_Sentinels_Game_Guide.mp4)** · [Slides (PDF)](presentation/slides.pdf)
+**[▶ Watch the full walkthrough (12:52, 1080p)](https://youtu.be/TBfH10EU_gI)** · [Slides (PDF)](presentation/slides.pdf)
 
 </div>
 
