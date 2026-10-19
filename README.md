@@ -2,9 +2,20 @@
 
 <a href="https://sumitchongder.github.io/spacetime-sentinels/"><img src="docs/assets/banner.png" alt="Spacetime Sentinels" width="100%"></a>
 
-# Spacetime Sentinels
+# 🥇 Spacetime Sentinels
+
+[![Winner](https://img.shields.io/badge/🏆_WINNER_·_1ST_PLACE-Qiskit_Fall_Fest_2026_·_IIT_Jodhpur_·_Advanced_Track-F5B301?style=for-the-badge&labelColor=0B0F17)](#-hackathon-result-1st-place-advanced-track)
 
 ### A game of low-overhead quantum error detection with spacetime codes. Every score is computed with Qiskit.
+
+**Team Quantum Eclipse · Sumit Tapas Chongder\* · Aditya Kumar\***<br>
+Department of Computer Science & Engineering and Department of Physics, Indian Institute of Technology Jodhpur<br>
+<sub>\* equal contribution</sub>
+
+[![Play the game](https://img.shields.io/badge/▶_PLAY_THE_GAME-live_on_GitHub_Pages-2563EB?style=for-the-badge&labelColor=0B0F17)](https://sumitchongder.github.io/spacetime-sentinels/)
+[![Video walkthrough](https://img.shields.io/badge/🎬_VIDEO-17--min_walkthrough-D6264B?style=for-the-badge&labelColor=0B0F17)](https://youtu.be/TBfH10EU_gI)
+[![Report](https://img.shields.io/badge/📄_REPORT-12--page_paper_(PDF)-0F9F8F?style=for-the-badge&labelColor=0B0F17)](report/main.pdf)
+[![arXiv](https://img.shields.io/badge/arXiv-quant--ph_·_submitted-B31B1B?style=for-the-badge&logo=arxiv&logoColor=white)](#-paper-and-arxiv-preprint)
 
 [![CI](https://github.com/Sumitchongder/spacetime-sentinels/actions/workflows/ci.yml/badge.svg)](https://github.com/Sumitchongder/spacetime-sentinels/actions/workflows/ci.yml)
 [![Pages](https://github.com/Sumitchongder/spacetime-sentinels/actions/workflows/pages.yml/badge.svg)](https://sumitchongder.github.io/spacetime-sentinels/)
@@ -14,25 +25,49 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)
 [![License](https://img.shields.io/badge/license-Apache_2.0-green)](LICENSE)
 
-
-[![Play the game](https://img.shields.io/badge/▶_PLAY_THE_GAME-live_on_GitHub_Pages-2563EB?style=for-the-badge&labelColor=0B0F17)](https://sumitchongder.github.io/spacetime-sentinels/)
-[![Video walkthrough](https://img.shields.io/badge/🎬_VIDEO-17--min_walkthrough-D6264B?style=for-the-badge&labelColor=0B0F17)](#-video-walkthrough)
-[![Report](https://img.shields.io/badge/📄_REPORT-12--page_paper_(PDF)-0F9F8F?style=for-the-badge&labelColor=0B0F17)](report/main.pdf)
-[![arXiv](https://img.shields.io/badge/arXiv-quant--ph_·_submitted-B31B1B?style=for-the-badge&logo=arxiv&logoColor=white)](#-paper-and-arxiv-preprint)
-
-
-
-**Qiskit Fall Fest 2026 · IIT Jodhpur · Advanced track**<br>
-*Gamifying Error Detection, Mitigation and Correction: error-detection track*
-
-**Sumit Tapas Chongder\* · Aditya Kumar\***<br>
-Department of Computer Science & Engineering and Department of Physics<br>
-Indian Institute of Technology Jodhpur<br>
-<sub>\* equal contribution</sub>
-
-[**Play**](https://sumitchongder.github.io/spacetime-sentinels/) · [**Watch**](#-video-walkthrough) · [**Read**](report/main.pdf) · [Key results](#-key-results) · [Judging criteria](#-how-this-submission-meets-the-judging-criteria) · [Run it yourself](#-quick-start)
+[**🏆 Proof of win**](#-hackathon-result-1st-place-advanced-track) · [**🧩 Qiskit code**](src/sentinels) · [**Play**](https://sumitchongder.github.io/spacetime-sentinels/) · [**Watch**](https://youtu.be/TBfH10EU_gI) · [**Read**](report/main.pdf) · [Key results](#-key-results) · [Run it yourself](#-quick-start)
 
 </div>
+
+---
+
+## 🏆 Hackathon result: 1st Place, Advanced Track
+
+<div align="center">
+
+**🥇 First Place · Qiskit Fall Fest 2026 Hackathon · IIT Jodhpur, in collaboration with IBM Quantum**<br>
+*Advanced Track: Gamifying Quantum Error Detection with Spacetime Codes*<br>
+Team **Quantum Eclipse**: Sumit Tapas Chongder and Aditya Kumar · Results announced 19 October 2026
+
+<table>
+<tr>
+<td align="center" width="50%">
+<a href="awards/qiskit-fall-fest-2026/certificate_of_winning_achievement.png"><img src="awards/qiskit-fall-fest-2026/certificate_of_winning_achievement.png" width="100%" alt="IBM Quantum Certificate of Winning Achievement"></a><br>
+<b>IBM Quantum Certificate of Winning Achievement</b>
+</td>
+<td align="center" width="50%">
+<a href="awards/qiskit-fall-fest-2026/winners_poster.jpg"><img src="awards/qiskit-fall-fest-2026/winners_poster.jpg" width="70%" alt="Official winners poster"></a><br>
+<b>Official winners poster</b>
+</td>
+</tr>
+<tr>
+<td align="center" colspan="2">
+<a href="awards/qiskit-fall-fest-2026/winners_announcement_email.png"><img src="awards/qiskit-fall-fest-2026/winners_announcement_email.png" width="60%" alt="Official winners announcement email"></a><br>
+<b>Official winners announcement from Qiskit Fall Fest IIT Jodhpur (qff@iitj.ac.in)</b>
+</td>
+</tr>
+</table>
+
+</div>
+
+**Winning submission and its Qiskit code** (this repository):
+
+| What | Where |
+|---|---|
+| Qiskit source code | [`src/sentinels/`](src/sentinels): `qiskit-paulice` checks ([`checks.py`](src/sentinels/checks.py)), Aer density-matrix scoring ([`fidelity.py`](src/sentinels/fidelity.py)), `SamplerV2` validation ([`sampling.py`](src/sentinels/sampling.py)), noise models ([`noise.py`](src/sentinels/noise.py)) |
+| Reproducible notebook | [`notebooks/01_walkthrough.ipynb`](notebooks/01_walkthrough.ipynb), the six challenge steps in Qiskit |
+| Experiments and tests | [`experiments/`](experiments) · [`tests/`](tests) |
+| Live game · video · report | [Game](https://sumitchongder.github.io/spacetime-sentinels/) · [Video](https://youtu.be/TBfH10EU_gI) · [Report](report/main.pdf) |
 
 ---
 
